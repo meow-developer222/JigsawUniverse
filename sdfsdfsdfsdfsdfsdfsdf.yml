@@ -1,0 +1,82 @@
+version: "3.9"
+
+services:
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - placememo
+      - mariadb
+    volumes:
+      - /home/centos/dispather-nginx/dispatch.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./nginx/ssl:/etc/nginx/ssl
+      - /home/centos/docs:/usr/share/nginx/html:Z
+    networks:
+      - webnet
+    restart: always
+
+  placememo:
+    image: placememo
+    container_name: placememo
+    expose:
+      - "3000"
+    environment:
+      DB_HOST: mariadb
+      DB_USER: root
+      DB_PASSWORD: mine11!!123
+      DB_NAME: placememo
+    depends_on:
+      - mariadb
+    networks:
+      - webnet
+    restart: always
+
+  jigsaw_frontend:
+    image: jigsaw_frontend
+    container_name: jigsaw_frontend
+    expose:
+      - "6710"
+    # depends_on:
+    #   - mariadb
+    networks:
+      - webnet
+    restart: always
+
+  jigsaw_server:
+    image: jigsaw_server
+    container_name: jigsaw_server
+    expose:
+      - "6710"
+    # depends_on:
+    #   - mariadb
+    networks:
+      - webnet
+      - externalnet
+    restart: always
+
+  mariadb:
+    image: mariadb:10.11
+    container_name: mariadb
+    environment:
+      MYSQL_ROOT_PASSWORD: mine11!!123
+      MYSQL_CHARSET: utf8mb4
+      MYSQL_COLLATION: utf8mb4_general_ci
+    volumes:
+      - ./mariadb/data:/var/lib/mysql
+    expose:
+      - "3306"
+    ports:
+      - "3306:3306"
+    networks:
+      - externalnet
+      - webnet
+    restart: always
+
+networks:
+  webnet:
+    driver: bridge
+  externalnet:
+    driver: bridge
