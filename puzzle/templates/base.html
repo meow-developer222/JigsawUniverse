@@ -9,6 +9,11 @@
 </head>
 <body>
     {%block content %}{% endblock %}
-    <!-- <script src="{{url_for('static', filename='js/main.js')}}"></script> -->
+    <script type="module" src="{{ url_for('static', filename='dist/main.js') }}"></script>
+
+
+
+    <p>Icons by <a href="https://flaticon.com">Flaticon</a></p>
+    
 </body>
 </html>

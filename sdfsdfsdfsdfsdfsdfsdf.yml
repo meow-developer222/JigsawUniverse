@@ -49,9 +49,11 @@ services:
     image: jigsaw_server
     container_name: jigsaw_server
     expose:
-      - "6710"
+      - "6767"
     # depends_on:
     #   - mariadb
+    ports:
+      - "6767:6767"
     networks:
       - webnet
       - externalnet

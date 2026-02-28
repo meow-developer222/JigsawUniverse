@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "outDir": "./static/dist",     // 빌드된 JS가 들어갈 위치
+    "strict": true,                // 엄격한 타입 체크 (성취감 파괴 방지!)
+    "moduleResolution": "bundler",
+    "sourceMap": true,              // 브라우저에서 TS로 디버깅 가능하게 함
+    "allowJs": true
+  },
+  "include": ["src/**/*"]
+}

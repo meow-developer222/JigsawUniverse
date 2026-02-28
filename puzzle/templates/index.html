@@ -8,10 +8,9 @@
 {% block content %}
 
 <div>
-    <canvas id="puzzle" width="1000" height="1000"></canvas>
-    <input type="text" id="nickname">
-    <button id="startbtn" roomID="{{roomID}}">Test</button>
+    <canvas id="puzzle" width="500" height="700"></canvas>
+    <!-- <input type="text" id="nickname">
+    <button id="startbtn" roomID="{{roomID}}">Test</button> -->
 </div>
-<script type="module" src="{{url_for('static', filename='js/network.js')}}"></script>
 
 {% endblock %}
