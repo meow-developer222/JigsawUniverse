@@ -5,12 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{% endblock %}</title>
     <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@flaticon/flaticon-uicons@3.3.1/css/all/all.min.css">
+
     {% block head %}{% endblock %}
 </head>
 <body>
     {%block content %}{% endblock %}
-    <script type="module" src="{{ url_for('static', filename='dist/main.js') }}"></script>
+    
+    <script src="{{ url_for('static', filename='dist/UI.js') }}"></script>
 
+    
+
+    
+    
 
 
     <p>Icons by <a href="https://flaticon.com">Flaticon</a></p>

@@ -1,7 +1,7 @@
 import { AnimationTween, RawAnimation } from "./animation.js";
 import { Board } from "./board.js"
 import { draw_piece_path } from "./canvas_utils.js";
-import { EXIT_CELL_BTN_MARGIN, MARGIN, PIECE_SIZE, SELECT_ZOOM_AMOUNT } from "./const.js"
+import { EXIT_CELL_BTN_MARGIN, MARGIN, PALLETE, PIECE_SIZE, SELECT_ZOOM_AMOUNT } from "./const.js"
 import { Piece } from "./piece.js"
 
 
@@ -44,32 +44,37 @@ export class CellRenderer
         )
 
         
+
+        
         this.pieces.forEach(piece => {
-            piece.y += Board.instance.cellSize * PIECE_SIZE + MARGIN * 2;
+            if (piece.y <= Math.floor(Board.instance.cellSize ** 2 / (2*Board.instance.cellSize)) * PIECE_SIZE / 2) piece.y += Board.instance.cellSize * PIECE_SIZE + MARGIN * 2;
         });
     }
 
     reloadOffscreenCanvas()
     {
-        // console.log(this.pieces.length);
-        this.cacheCtx.fillStyle = "#ffffff";
-        this.cacheCtx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
-        this.cacheCtx.fillStyle = "#E8F5BD"
         
-        this.cacheCtx.fillRect(0, 0, Board.instance.cellSize * PIECE_SIZE + MARGIN * 2, Board.instance.cellSize * PIECE_SIZE + MARGIN * 2);
-        this.cacheCtx.fillStyle = "#ffffff";
+        // console.log(this.pieces.length);
+        // this.cacheCtx.fillStyle = "#ffffff";
+        // this.cacheCtx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+        this.cacheCtx.fillStyle = PALLETE[3];
+        this.cacheCtx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+        // this.cacheCtx.fillRect(0, 0, Board.instance.cellSize * PIECE_SIZE + MARGIN * 2, Board.instance.cellSize * PIECE_SIZE + MARGIN * 2);
+        // this.cacheCtx.fillStyle = "#ffffff";
         // this.cacheCtx.fillRect(MARGIN - Board.instance.cellSize * Board.instance.cellX, MARGIN - Board.instance.cellSize * Board.instance.cellY, Board.instance.cellSize * PIECE_SIZE + PIECE_SIZE, Board.instance.cellSize * PIECE_SIZE + PIECE_SIZE);
         
         
         
-        this.cacheCtx.fillRect(-Board.instance.cellSize * PIECE_SIZE * Board.instance.cellX + MARGIN, -Board.instance.cellSize * PIECE_SIZE * Board.instance.cellY + MARGIN, Board.instance.imageWidth, Board.instance.imageHeight);
+        // this.cacheCtx.fillRect(-Board.instance.cellSize * PIECE_SIZE * Board.instance.cellX + MARGIN, -Board.instance.cellSize * PIECE_SIZE * Board.instance.cellY + MARGIN, Board.instance.imageWidth, Board.instance.imageHeight);
         // this.cacheCtx.globalAlpha = 0.8
         this.cacheCtx.save();
         this.cacheCtx.rect(0, 0, Board.instance.cellSize * PIECE_SIZE + MARGIN * 2, Board.instance.cellSize * PIECE_SIZE + MARGIN * 2);
         
         
         this.cacheCtx.clip();
+        this.cacheCtx.filter = 'grayscale(70%)';
         this.cacheCtx.drawImage(Board.instance.image, -Board.instance.cellSize * PIECE_SIZE * Board.instance.cellX + MARGIN, -Board.instance.cellSize * PIECE_SIZE * Board.instance.cellY + MARGIN, Board.instance.imageWidth, Board.instance.imageHeight);
+        this.cacheCtx.filter = "none";  
         this.cacheCtx.restore();
         // this.cacheCtx.globalAlpha = 1
         this.cacheCtx.lineWidth = 8;
@@ -85,19 +90,52 @@ export class CellRenderer
             this.cacheCtx.drawImage(piece.off_canvas, piece.x, piece.y);
         });
 
-        this.cacheCtx.fillStyle = "#A2CB8B";
+        this.cacheCtx.fillStyle = PALLETE[1];
         this.cacheCtx.fillRect(EXIT_CELL_BTN_MARGIN, EXIT_CELL_BTN_MARGIN, MARGIN - EXIT_CELL_BTN_MARGIN * 2, MARGIN - EXIT_CELL_BTN_MARGIN * 2);
-        this.cacheCtx.strokeStyle = "#84B179";
+        this.cacheCtx.strokeStyle = PALLETE[0];
         this.cacheCtx.lineWidth = 3;
         this.cacheCtx.strokeRect(EXIT_CELL_BTN_MARGIN, EXIT_CELL_BTN_MARGIN, MARGIN - EXIT_CELL_BTN_MARGIN * 2, MARGIN - EXIT_CELL_BTN_MARGIN * 2);
-        this.cacheCtx.drawImage(BackIcon, EXIT_CELL_BTN_MARGIN * 2, EXIT_CELL_BTN_MARGIN * 2, MARGIN - EXIT_CELL_BTN_MARGIN * 4, MARGIN - EXIT_CELL_BTN_MARGIN * 4)
+        this.cacheCtx.drawImage(BackIcon, EXIT_CELL_BTN_MARGIN * 2, EXIT_CELL_BTN_MARGIN * 2, MARGIN - EXIT_CELL_BTN_MARGIN * 4, MARGIN - EXIT_CELL_BTN_MARGIN * 4);
+
+
     }
 
     render()
     {
+        
         this.ctx.drawImage(this.cacheCanvas, 0, 0);
         this.selectedPiece.forEach(pieceID => {
             let piece = this.pieces.find((x) => x.pieceID === pieceID)!;
+
+
+            if (piece.selectedBy)
+            {
+                this.ctx.translate(piece.x - piece.off_canvas.width * (piece.zoom - 1) / 2, piece.y - piece.off_canvas.height * (piece.zoom - 1) / 2);
+                this.ctx.scale(piece.zoom, piece.zoom);
+                draw_piece_path(this.ctx, piece);
+                this.ctx.strokeStyle = "#7AAACE";
+                
+                this.ctx.lineWidth = 7;
+                this.ctx.globalAlpha = piece.correctAlpha;
+                this.ctx.stroke();
+                this.ctx.globalAlpha = 1;
+                this.ctx.scale(1 / piece.zoom, 1 / piece.zoom);
+                this.ctx.translate(-piece.x + piece.off_canvas.width * (piece.zoom - 1) / 2, -piece.y + piece.off_canvas.height * (piece.zoom - 1) / 2);
+
+
+                this.ctx.beginPath();
+                this.ctx.lineWidth = 4;
+                this.ctx.moveTo(piece.x + PIECE_SIZE + 40, piece.y + 5)
+                this.ctx.lineTo(piece.x + PIECE_SIZE + 60, piece.y - 5)
+                this.ctx.stroke();
+                this.ctx.fillStyle = "#7AAACE";
+                this.ctx.fillRect(piece.x + PIECE_SIZE + 65, piece.y - 15, 60, 20);
+                this.ctx.fillStyle = "#fff";
+                this.ctx.font = "14px bold";
+                this.ctx.textBaseline = "hanging"
+                this.ctx.fillText(piece.selectedBy.length > 6 ? piece.selectedBy.slice(0, 5) + "..." : piece.selectedBy, piece.x + PIECE_SIZE + 67, piece.y - 13);
+                
+            }
             
             
             if (piece.zoom != 1){
@@ -105,6 +143,12 @@ export class CellRenderer
                 this.ctx.translate(piece.x, piece.y)
                 this.ctx.scale(piece.zoom, piece.zoom);
                 this.ctx.drawImage(piece.off_canvas, -piece.off_canvas.width / 2 * (piece.zoom - 1), -piece.off_canvas.height / 2 * (piece.zoom - 1));
+                
+                if (piece.selectedBy)
+                {
+                    
+                }
+                
                 this.ctx.scale(1 / piece.zoom, 1 / piece.zoom);
                 this.ctx.translate(-piece.x, -piece.y)
                 
@@ -127,6 +171,7 @@ export class CellRenderer
                 this.ctx.globalAlpha = 1;
                 this.ctx.scale(1 / piece.correctZoom, 1 / piece.correctZoom);
                 this.ctx.translate(-piece.x + piece.off_canvas.width * (piece.correctZoom - 1) / 2, -piece.y + piece.off_canvas.height * (piece.correctZoom - 1) / 2);
+
                 
             }
             
@@ -279,8 +324,9 @@ export class FullRenderer
         Board.instance.cellX = cx;
         Board.instance.cellY = cy;
         // let pieces = Board.instance.generatePieces();
+        // console.log(Board.instance.pieces);
         let cellRenderer: CellRenderer = new CellRenderer(this.ctx, [...Board.instance.pieces]);
-        
+
         cellRenderer.reloadOffscreenCanvas();
         cellRenderer.render();
     }
@@ -297,8 +343,9 @@ export class FullRenderer
 
     reloadOffscreenCanvas(cellData: number[][])
     {
-        this.cacheCtx.fillStyle = "#E8F5BD";
-        this.cacheCtx.fillRect(0, 0, Board.instance.cellSize * PIECE_SIZE + MARGIN * 2, Board.instance.cellSize * PIECE_SIZE + MARGIN * 2);
+        this.cacheCtx.fillStyle = PALLETE[3];
+        // this.cacheCtx.fillRect(0, 0, Board.instance.cellSize * PIECE_SIZE + MARGIN * 2, Board.instance.cellSize * PIECE_SIZE + MARGIN * 2);
+        this.cacheCtx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
 
 
         // 1. 이미지가 그려질 최대 허용 범위 계산
@@ -326,8 +373,9 @@ export class FullRenderer
         this.imgY = y;
 
         // 5. 캔버스 초기화 후 그리기
-        
+        this.cacheCtx.filter = 'grayscale(70%)';
         this.cacheCtx.drawImage(Board.instance.image, x, y, finalWidth, finalHeight);
+        this.cacheCtx.filter = 'none';
 
         let cellWidth = Board.instance.boardWidth / Board.instance.cellSize;
         let cellHeight = Board.instance.boardHeight / Board.instance.cellSize;
@@ -341,16 +389,42 @@ export class FullRenderer
                 
                 this.cacheCtx.lineWidth = 4;
                 let value = cellData[cy][cx];
-                this.cacheCtx.globalAlpha = 0.5 * value;
-                // this.cacheCtx.fillStyle = "#ffffff";
-                // this.cacheCtx.fillRect(x + finalWidth / cellWidth * cx, y + finalHeight / cellHeight * cy, finalWidth / cellWidth, finalHeight / cellHeight);
-                let metrics = this.cacheCtx.measureText(value * 100 + "%");
-                const textHeight = metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent;
+
+                // 공통 좌표 및 크기 계산 (가독성을 위해 변수화)
+                const cellW = finalWidth / cellWidth;
+                const cellH = finalHeight / cellHeight;
+                const posX = x + cellW * cx;
+                const posY = y + cellH * cy;
+
+                if (value === 1) {
+                    this.cacheCtx.save();
+                    // 1. 클리핑 영역 설정
+                    this.cacheCtx.beginPath(); // 이전 경로가 영향을 주지 않도록 시작
+                    this.cacheCtx.rect(posX, posY, cellW, cellH);
+                    this.cacheCtx.clip();
+                    
+                    // 2. 이미지 그리기 (이 이미지만 클리핑의 영향을 받음)
+                    this.cacheCtx.drawImage(Board.instance.image, x, y, finalWidth, finalHeight);
+                    this.cacheCtx.restore(); // 여기서 클리핑 해제!
+                }
+
+                // --- 여기서부터는 클리핑의 영향을 받지 않음 ---
+
+                // 3. 텍스트 그리기
                 this.cacheCtx.globalAlpha = 1;
                 this.cacheCtx.fillStyle = "#ffffff";
-                this.cacheCtx.fillText(value * 100 + "%", x + finalWidth / cellWidth * cx + (finalWidth / cellWidth - metrics.width) / 2, (y + finalHeight / cellHeight * cy) + (finalHeight / cellHeight + textHeight) / 2);
+                let textContent = (value * 100) + "%";
+                let metrics = this.cacheCtx.measureText(textContent);
+                const textHeight = metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent;
 
-                this.cacheCtx.strokeRect(x + finalWidth / cellWidth * cx, y + finalHeight / cellHeight * cy, finalWidth / cellWidth, finalHeight / cellHeight);
+                this.cacheCtx.fillText(
+                    textContent, 
+                    posX + (cellW - metrics.width) / 2, 
+                    posY + (cellH + textHeight) / 2
+                );
+
+                // 4. 테두리 그리기 (마지막에 그려야 텍스트나 이미지 위에 선명하게 올라옵니다)
+                this.cacheCtx.strokeRect(posX, posY, cellW, cellH);
             }
         }
     }
@@ -363,7 +437,8 @@ export class FullRenderer
         this.ctx.drawImage(this.cacheCanvas, 0, 0)    
         this.ctx.translate(this.camX, this.camY);
         this.ctx.scale(1 / this.zoom, 1 / this.zoom);
-        this.ctx.fillStyle = "white"
+        // this.ctx.fillStyle = "white"
+        this.ctx.fillStyle = PALLETE[3];
         this.ctx.fillRect(0, Board.instance.cellSize * PIECE_SIZE + MARGIN * 2, this.ctx.canvas.width, this.ctx.canvas.height - Board.instance.cellSize * PIECE_SIZE + MARGIN * 2);
     }
 }

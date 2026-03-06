@@ -33,12 +33,8 @@ export class Piece
     deselectAnim: RawAnimation
     correctAnim: RawAnimation;
     white: boolean;
-    isCorrect: boolean = false;
-    
-    static fromJson(json: object)
-    {
-        return 
-    }
+    isCorrect: boolean;
+
 
 
     init_offscreen_canvas()
@@ -72,8 +68,9 @@ export class Piece
 
     static nextPieceID = 0
 
-    constructor(correctX: number, correctY: number, x: number, y: number, gridX: any, gridY: any, corners: number[][], spine_dir: number[], imageX: number, imageY: number)
+    constructor(correctX: number, correctY: number, x: number, y: number, gridX: any, gridY: any, corners: number[][], spine_dir: number[], imageX: number, imageY: number, isCorrect: boolean = false)
     {
+        this.isCorrect = isCorrect;
         this.white = false;
         const size = PIECE_SIZE + Math.max(SPINE_HEIGHT, SPINE_WIDTH) * 4;
         this.off_canvas = new OffscreenCanvas(size, size);
@@ -96,9 +93,17 @@ export class Piece
         this.pieceID = Piece.nextPieceID++;
     }
 
-    select()
+    static fromJson(data: {correctX: number, correctY: number, x: number, y: number, gridX: any, gridY: any, corners: number[][], spine_dir: number[], imageX: number, imageY: number, isCorrect: boolean})
     {
         
+        return new Piece(
+            data.correctX, data.correctY, data.x, data.y, data.gridX, data.gridY, data.corners, data.spine_dir, data.imageX, data.imageY, data.isCorrect
+        );
+    }
+
+    select()
+    {
+        console.log("MAGE");
         this.selectAnim.play();
     }
 
@@ -107,6 +112,7 @@ export class Piece
     }
 
     correct() {
+        CellRenderer.instance.selectedPiece.push(this.pieceID);
         this.white = true;
         this.isCorrect = true;
         

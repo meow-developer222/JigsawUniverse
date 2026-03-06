@@ -1,4 +1,5 @@
 import { MARGIN, MAX_OFFSET, PIECE_SIZE } from "./const.js";
+import { LocalPuzzleDataManager, PuzzleDataManager } from "./datamgr.js";
 import { Piece } from "./piece.js";
 import { range, shuffle } from "./utils.js";
 
@@ -14,6 +15,7 @@ export class Board
     cellSize: number;
     pieces: Piece[] = [];
     isNetwork: boolean = false;
+    dataManager: PuzzleDataManager = new LocalPuzzleDataManager("workspace1");
     cellX: number = -1;
     cellY: number = -1;
 
@@ -89,8 +91,8 @@ export class Board
                 let piece = new Piece(
                     x * (PIECE_SIZE) + PIECE_SIZE / 2,
                     y * (PIECE_SIZE) + PIECE_SIZE / 2,
-                    (pieceOrder[y * this.cellSize + x] % (2*this.cellSize)) * PIECE_SIZE / 2,
-                    Math.floor(pieceOrder[y * this.cellSize + x] / (2*this.cellSize)) * PIECE_SIZE / 2,
+                    (pieceOrder[(y % this.cellSize) * this.cellSize + (x % this.cellSize)] % (2*this.cellSize)) * PIECE_SIZE / 2,
+                    Math.floor(pieceOrder[(y % this.cellSize) * this.cellSize + (x % this.cellSize)] / (2*this.cellSize)) * PIECE_SIZE / 2,
                     
                     x,
                     

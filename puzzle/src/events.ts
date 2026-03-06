@@ -1,6 +1,7 @@
 import { Board } from "./board.js";
 import { EXIT_CELL_BTN_MARGIN, MARGIN, PIECE_SIZE, SNAP_THRESOLD, SPINE_HEIGHT } from "./const.js";
 import { CellRenderer, FullRenderer } from "./render.js";
+import { calculateFinishedPercent } from "./utils.js";
 
 let offset = {x: 0, y: 0}
 
@@ -43,14 +44,18 @@ function mouseDownInFullMode(e: MouseEvent)
     }
 }
 function mouseDownInCellMode(e: MouseEvent) {
+
+    let mx = e.offsetX - PIECE_SIZE / 2;
+    let my = e.offsetY - PIECE_SIZE / 2;
     for (let i=Board.instance.pieces.length - 1; i >= 0; i--)
+    // for (let i=0; i < Board.instance.pieces.length; i++)
     {
         let piece = Board.instance.pieces[i];
         if (
-            e.offsetX >= piece.x + SPINE_HEIGHT &&
-            e.offsetX < piece.x + SPINE_HEIGHT + PIECE_SIZE &&
-            e.offsetY >= piece.y + SPINE_HEIGHT &&
-            e.offsetY < piece.y + SPINE_HEIGHT + PIECE_SIZE &&
+            mx >= piece.x + SPINE_HEIGHT &&
+            mx < piece.x + SPINE_HEIGHT + PIECE_SIZE &&
+            my >= piece.y + SPINE_HEIGHT &&
+            my < piece.y + SPINE_HEIGHT + PIECE_SIZE &&
             piece.gridX >= Board.instance.cellSize * Board.instance.cellX && piece.gridX < Board.instance.cellSize * (Board.instance.cellX+1) &&
             piece.gridY >= Board.instance.cellSize * Board.instance.cellY && piece.gridY < Board.instance.cellSize * (Board.instance.cellY+1) &&
             !piece.isCorrect) {
@@ -65,17 +70,23 @@ function mouseDownInCellMode(e: MouseEvent) {
                 }
                 console.log(piece);
                 piece.select();
+                if (Board.instance.isNetwork) window.onPiecePick(piece.pieceID);
                 break;
 
-                
+            
                 
         }
     }
 
+    
+
     if (e.offsetX >= EXIT_CELL_BTN_MARGIN && e.offsetX < MARGIN - EXIT_CELL_BTN_MARGIN && e.offsetY >= EXIT_CELL_BTN_MARGIN && e.offsetY < MARGIN - EXIT_CELL_BTN_MARGIN)
     {
+        FullRenderer.instance.reloadOffscreenCanvas(calculateFinishedPercent(Board.instance.pieces));
         FullRenderer.instance.zoomOut();
     }
+
+
     
 }
 
@@ -99,6 +110,7 @@ function mouseMoveInCellMode(e: MouseEvent) {
         mySelectedPiece.y = e.offsetY - offset.y;
         
         CellRenderer.instance.render();
+        if (Board.instance.isNetwork) window.onPieceDrag(mySelectedPiece.pieceID, mySelectedPiece.x, mySelectedPiece.y);
     }
 }
 
@@ -142,12 +154,25 @@ function mouseUpInCellMode(e: MouseEvent) {
                 if (isEdgePiece || isAdjacentToCorrect)
                 {
                     selectedPiece.correct();
-                    return;
+                    // return;
                 }
             }
         }
-        // mySelectedPiece.correct();
+        else
+        {
+            window.onPieceUnPick(selectedPiece.pieceID);    
+        }
         
-        selectedPiece.deselect();
+        
+        // mySelectedPiece.correct();
+
+        Board.instance.dataManager!.setPiece(selectedPiece);
+
+        if (!selectedPiece.isCorrect)
+        {
+            CellRenderer.instance.selectedPiece = CellRenderer.instance.selectedPiece.filter((x) => x !== CellRenderer.instance.mySelectedPiece);
+            selectedPiece.deselect();
+        }
+        
     }
 }
