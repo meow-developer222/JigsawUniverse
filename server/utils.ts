@@ -54,3 +54,4 @@ export function generateRandomString(length: number) {
     }
     return result;
 }
+
