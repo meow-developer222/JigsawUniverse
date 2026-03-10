@@ -46,6 +46,16 @@ jobs:
           passphrase: ${{ secrets.KEY_PASSPHRASE }} # 이 부분이 추가되었습니다!
           script: |
             cd /home/centos/dispather-nginx
-            docker-compose pull
-            docker-compose up -d
+            
+            # 1. 새로 만든 이미지들만 Docker Hub에서 가져옵니다. (placememo는 제외)
+            docker-compose pull jigsaw_frontend jigsaw_backend
+            
+            # 2. 변경된 이미지만 적용하여 컨테이너를 다시 띄웁니다.
+            # (placememo는 로컬에 있으므로 그대로 유지되거나 로컬 것을 사용합니다.)
+            docker-compose up -d jigsaw_frontend jigsaw_backend
+            
+            # 3. 필요하다면 전체를 다시 띄우되, pull 없이 실행합니다.
+            # docker-compose up -d
+            
+            # 4. 정리
             docker image prune -f
