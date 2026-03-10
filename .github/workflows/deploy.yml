@@ -41,17 +41,11 @@ jobs:
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SERVER_HOST }}
-          username: centos # CentOS 기본 사용자 이름
+          username: centos
           key: ${{ secrets.SERVER_KEY }}
+          passphrase: ${{ secrets.KEY_PASSPHRASE }} # 이 부분이 추가되었습니다!
           script: |
-            # 1. docker-compose 위치로 이동
             cd /home/centos/dispather-nginx
-            
-            # 2. 최신 이미지 가져오기
             docker-compose pull
-            
-            # 3. 컨테이너 재시작 (변경된 이미지만 반영됨)
             docker-compose up -d
-            
-            # 4. 불필요한 옛날 이미지 정리 (용량 관리)
             docker image prune -f
