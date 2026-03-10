@@ -1,5 +1,5 @@
-import { Board } from "./board.js";
-import { Piece } from "./piece.js";
+import { Board } from "./board.ts";
+import { Piece } from "./piece.ts";
 
 export function shuffle(array: any[]) {
     // 원본 배열을 수정하지 않으려면 복사본을 만듭니다.

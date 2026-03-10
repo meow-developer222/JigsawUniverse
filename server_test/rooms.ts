@@ -1,4 +1,4 @@
-import { Board } from "./board.js";
+import { Board } from "./board.ts";
 
 export class Room
 {

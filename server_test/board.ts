@@ -1,7 +1,7 @@
-import { MARGIN, MAX_OFFSET, PIECE_SIZE } from "./const.js";
+import { MARGIN, MAX_OFFSET, PIECE_SIZE } from "./const.ts";
 
-import { Piece } from "./piece.js";
-import { range, shuffle } from "./utils.js";
+import { Piece } from "./piece.ts";
+import { range, shuffle } from "./utils.ts";
 
 
 

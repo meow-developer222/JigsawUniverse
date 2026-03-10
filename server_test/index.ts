@@ -93,9 +93,9 @@ io.on("connection", (socket: Socket) => {
   });
 
   // [방 생성]
-  socket.on("create_room", (image_url: string) => {
+  socket.on("create_room", (image_url: string, difficulty: number) => {
     const roomName = generateRandomString(16);
-    const newBoard = new Board(image_url, 24, 24, 8);
+    const newBoard = new Board(image_url, difficulty * 6, difficulty * 6, 6);
     newBoard.generatePieces();
     
     rooms[roomName] = new Room(roomName, newBoard);
