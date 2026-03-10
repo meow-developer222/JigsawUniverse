@@ -88,8 +88,8 @@ export class Board
                 };
                 
                 let piece = new Piece(
-                    x * (PIECE_SIZE) + PIECE_SIZE / 2,
-                    y * (PIECE_SIZE) + PIECE_SIZE / 2,
+                    (x % this.cellSize) * (PIECE_SIZE) + PIECE_SIZE / 2,
+                    (y % this.cellSize) * (PIECE_SIZE) + PIECE_SIZE / 2,
                     (pieceOrder[(y % this.cellSize) * this.cellSize + (x % this.cellSize)] % (2*this.cellSize)) * PIECE_SIZE / 2,
                     Math.floor(pieceOrder[(y % this.cellSize) * this.cellSize + (x % this.cellSize)] / (2*this.cellSize)) * PIECE_SIZE / 2,
                     

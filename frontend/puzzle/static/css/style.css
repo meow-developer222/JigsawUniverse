@@ -1,0 +1,348 @@
+
+*
+{
+    margin: 0;
+    box-sizing: border-box;
+}
+
+
+
+
+.alert-back
+{
+    background-color: #00000088;
+    position: absolute;
+
+    left: 0;
+    top: 0;
+    width: 100%;
+    max-width: 100%;
+    height: 100%;
+    /* display: none; */
+    display: flex;
+    
+    
+    align-items: center;
+    
+    justify-content: center;
+}
+
+.difficulty-selection
+{
+    margin-top: 10px;
+    height: 40px;
+    border-radius: 20px;
+    padding: 0px 20px;
+    background-color: #e3efff;
+    border: none;
+    outline: none;
+    align-items: center;
+    
+
+}
+
+.difficulty-selection:open
+{
+    
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    
+}
+.difficulty-selection option
+{
+    background-color: #e3efff;
+}
+
+
+
+option
+{
+    place-items: start;
+
+}
+
+option:hover {
+    background-color: #cce2ff !important;
+}
+
+.difficulty-selection option:checked {
+    background-color: #cce2ff;
+}
+
+select, ::picker(select)
+{
+    appearance: base-select;
+}
+
+
+.difficulty-selection::picker(select){
+    
+    border: none;
+    
+    background-color: #e3efff;
+}
+
+input
+{
+    border-radius: 25px;
+    height: 50px;
+    background-color: #e3efff;
+    border: none;
+    outline: none;
+    padding: 0px 25px;
+    font-size: 30px;
+}
+
+#puzzle
+{
+    width: 100%;
+    max-width: 520px;
+    aspect-ratio: 5 / 7;
+}
+
+
+body
+{
+    width: 100%;
+
+    background-color: #e3efff;
+        
+    height: 100vh;
+}
+
+
+/* ["#355872", "#7AAACE", "#9CD5FF", "#F7F8F0"] */
+
+.alert
+{
+    box-sizing: border-box;
+    
+
+    
+    background-color: white;
+
+    width: calc(100% - 40px);
+    /* margin-left: 50%;
+    transform: translate(-50%, -50%); */
+    /* margin: 20px; */
+
+    /* margin-right: 20px; */
+    
+    /* height: 700px; */
+    
+    
+    
+    
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    padding: 10px 30px;
+
+    justify-content: space-between;
+
+    
+    
+    
+}
+
+.newPuzzle
+{
+    
+    max-width: calc(100%);
+    width: 520px;
+    aspect-ratio: 5 / 7;
+}
+
+
+
+.alert-title
+{
+    width: 100%;
+    font-size: 30px;
+    font-weight: 800;
+    color: #355872;
+    text-align: center;
+    
+
+    
+    height: 50px;
+}
+
+.puzzle-selection
+{
+    background-color: #e3efff;
+    padding: 20px;
+    /* margin: 30px; */
+    margin-top: 10px;
+    border-radius: 20px;
+    display: flex;
+    flex-wrap: wrap;
+
+    flex-grow: 1;
+    height: 100%;
+    
+}
+
+.alert-content
+{
+    text-align: center;
+    font-size: 20px;
+    color: #355872;
+    font-weight: 800;
+}
+
+.alert-ok
+{
+    background-color: #7AAACE;
+    border: none;
+    outline: none;
+
+    border-radius: 20px;
+    margin: 10px 0px;
+    
+    width: 100%;
+    font-size: 30px;
+    font-weight: 700;
+    color: white;
+
+    
+    height: 50px;
+}
+
+button
+{
+    border: 0;
+    outline: 0;
+    background: none;
+}
+
+.popup-close
+{
+    
+    font-size: 25px;
+}
+
+#puzzle
+{
+    touch-action: none;
+}
+
+.alert-cancel
+{
+    
+    background-color: #e3efff;
+    border: none;
+    outline: none;
+
+    border-radius: 20px;
+    margin: 10px 0px;
+    
+    width: 100%;
+    font-size: 30px;
+    font-weight: 700;
+    color: #7AAACE;
+
+    
+    height: 50px;
+}
+
+.content-center
+{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.h-100
+{
+    height: 100%;
+}
+
+.navbar
+{
+    
+    position: fixed;
+    width: 100%;
+    /* width: 392px; */
+    height: 50px;
+    top: 0;
+    background-color: #fff;
+    
+    /* padding: 0px 20px; */
+}
+
+a
+{
+    text-decoration: none;
+    color: black;
+}
+
+
+.nav-icons
+{
+    max-width: 500px;
+    display: flex;
+    align-items: center;
+    height: 100%;
+    
+}
+
+.nav-icons i
+{
+    margin-right: 50px;
+}
+
+
+.nav-icons > a:first-child
+{
+    margin-left: 20px;
+}
+
+.card-grey
+{
+    background-color: #f1f1f1;
+    border-radius: 10px;
+    word-break: keep-all;
+    margin-top: 10px;
+    padding: 10px;
+    
+}
+
+.warning
+{
+    color: rgb(201, 85, 64);
+}
+
+.d-flex
+{
+    display: flex;
+}
+
+.align-center
+{
+    align-items: center;
+}
+
+.puzzle-choice
+{
+    padding: 5px;
+    margin: 5px;
+}
+
+.puzzle-choice.selected
+{
+    border-radius: 7px;
+    border: #7AAACE solid 2px;
+    margin: 3px;
+    width: fit-content;
+    height: fit-content;
+}
+
+.new-content
+{
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+    flex-grow: 1;
+    
+}

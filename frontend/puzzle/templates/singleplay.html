@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+
+
+
+{%block head%}
+<style>
+    body {
+        overflow: hidden; /* 스크롤 기능 제거 */
+        height: 100vh; /* 화면 높이 고정 */
+        scrollbar-gutter: inherit; /* 스크롤바 숨김에 따른 레이아웃 흔들림 방지 */
+    }
+</style>
+
+{%endblock%}
+
+
+{% block content %}
+<script type="module" src="{{ url_for('static', filename='dist/main.js') }}"></script>
+<div class="navbar">
+    <div class="nav-icons">
+        <a href="">
+            <i class="fi fi-br-angle-left" style="font-size: 25px;"></i>
+        </a>
+        <button onclick="openNewDialog()">
+            <i class="fi fi-rr-add-document" style="font-size: 25px;"></i>
+        </button>    
+    </div>
+    
+    
+</div>
+
+<div class="content-center h-100">
+    <div>
+        <canvas id="puzzle" width="420" height="700"></canvas>
+    </div>
+
+    
+
+    
+    <!-- <input type="text" id="nickname">
+    <button id="startbtn" roomID="{{roomID}}">Test</button> -->
+</div>
+
+<div class="alert-back newpuzzle" id="newPuzzle">
+    
+    <div class="alert">
+
+        <div class="new-content">
+            <div class="d-flex">
+                <div class="alert-title">퍼즐 선택</div>
+                <button type="button" onclick="closeNewDialog()">
+                    <i class="fi fi-br-cross popup-close"></i>
+                </button>
+            </div>
+            
+        
+            <div class="puzzle-selection">
+                {%for puzzle in puzzles%}
+                    <div class="puzzle-choice" onclick="selectPuzzle(this);">
+                        <img src="{{puzzle['image']}}" alt="" width="100px" height="100px">
+                        <input type="hidden" name="" value="{{puzzle['json']}}">
+                    </div>
+                    
+
+                {%endfor%}
+            </div>
+
+            
+        </div>
+
+
+        <select class="difficulty-selection" onchange="selectDifficulty(this)">
+                <option value="1">6x6</option>
+                <option value="2">12x12</option>
+                <option value="3">18x18</option>
+                <option value="4">32x32</option>
+                <option value="5">40x40</option>
+
+        </select>
+
+        <div>
+            <div class="card-grey">
+                <div class="warning d-flex align-center">
+                    <i class="fi fi-rr-octagon-exclamation" style="font-size: 25px; margin-right: 5px;"></i>
+                    <div>
+                        새로운 퍼즐을 맞추기 시작하면 원래 퍼즐의 데이터는 사라집니다!
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="d-flex">
+                <button type="button" id="new-cancel" class="alert-cancel" onclick="closeNewDialog()">취소</button>
+                <div style="width: 20px;"></div>
+                <button type="button" id="new-ok" class="alert-ok" onclick="start()">생성</button>
+                
+            </div>
+            
+        </div>
+        
+    </div>
+</div>
+
+{% endblock %}
