@@ -31,7 +31,7 @@ jobs:
         with:
           context: ./server
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/jigsaw_backend:latest
+          tags: ${{ secrets.DOCKER_USERNAME }}/jigsaw_server:latest
 
   deploy:
     needs: build-and-push
