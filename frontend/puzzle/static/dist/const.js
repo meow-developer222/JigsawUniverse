@@ -1,0 +1,14 @@
+export const PIECE_SIZE = 50;
+export const SPINE_WIDTH = 15;
+export const SPINE_HEIGHT = 15;
+export const SPINE_OFFSET = 10;
+export const SELECT_ZOOM_AMOUNT = 1.1;
+export const SELECT_ZOOM_DURATION = 75; // ms
+export const CORRECT_ZOOM_AMOUNT = 1.3;
+export const CORRECT_ZOOM_DURATION = 200; // ms
+export const PALLETE = ["#355872", "#7AAACE", "#9CD5FF", "#e3efff", "#f1f1f1"]; // ms
+export const SNAP_THRESOLD = 20;
+export const MAX_OFFSET = 6; // 꼭짓점 랜덤 허용 범위
+export const MARGIN = 60;
+export const EXIT_CELL_BTN_MARGIN = 10;
+//# sourceMappingURL=const.js.map

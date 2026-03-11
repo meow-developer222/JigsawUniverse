@@ -17,7 +17,6 @@ def socketIO():
 
 
 
-
 @main_bp.route('/single_play')
 def single_play():
    return render_template('singleplay.html', puzzles=list(map(lambda x: {"json": json.dumps(x), **x}, puzzles)))
