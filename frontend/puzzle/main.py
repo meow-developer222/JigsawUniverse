@@ -15,9 +15,7 @@ def socketIO():
 
    return send_from_directory("./node-modules/socket.io")
 
-@main_bp.route('/')
-def index():
-   return render_template('puzzle.html')
+
 
 
 @main_bp.route('/single_play')
